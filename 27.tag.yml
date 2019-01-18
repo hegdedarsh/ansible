@@ -1,0 +1,37 @@
+This example will let us know about tags
+
+
+```yaml
+--- # This is an example for tags
+- hosts: apacheweb
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+    - name: install telnet and lynx package
+      yum: pkg={{item}} state=latest
+      with_items:
+        - telnet
+        - httpd
+        - nginx
+      tags:
+        - packages
+    - name: verify whether telnet lynx and nginx is installed
+      raw: yum list installed | grep telnet > /home/ansible/telnet.log
+      tags:
+        - verification
+```
+
+
+
+
+Usage of the commands
+
+```yaml
+ansible-playbook --tags "verification"
+```
+
+```yaml
+ansible-playbook tag.yml --skip-tags "verification"
+```
