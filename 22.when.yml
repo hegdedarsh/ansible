@@ -1,0 +1,22 @@
+Use the when module which is used like an option to check whether the package should be installe on Redhat or Centos based on the hosts
+
+```yaml
+--- # when playbook example
+- hosts: apacheweb
+  user: ansible
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  vars:
+    playbook_type: conditional example
+  vars_files:
+    - conf/copyright.yml
+    - conf/webdefaults.yml
+  tasks:
+    - name: Install apache to the distribution type(Centos7)
+      command: yum install httpd -y
+      when: ansible_os_family == "RedHat"
+    - name: Install apache to the distribution type(RedHat)
+      command: apt-get install apache2 -y
+      when: ansible_os_family == "Debian"
+```
