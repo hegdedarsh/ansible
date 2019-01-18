@@ -1,0 +1,22 @@
+This example is used for until module.
+
+
+
+```yaml
+--- # this is a until example
+- hosts: apacheweb
+  sudo: yes
+  connection: ssh
+  user: ansible
+  gather_facts: no
+  tasks:
+    - name: installing apache web server
+      yum: pkg=httpd state=latest
+    - name: verify service status
+      shell: systemctl status httpd
+      register: result
+      until: result.stdout.find("active(running)")!= -1
+      retries: 5
+      delay: 5
+    - debug: var=result
+```
